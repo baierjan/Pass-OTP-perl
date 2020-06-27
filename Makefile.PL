@@ -7,9 +7,9 @@ WriteMakefile(
     NAME           => 'Pass::OTP',
     AUTHOR         => q{Jan Baier <jan.baier@amagical.net>},
     ABSTRACT_FROM  => 'lib/Pass/OTP.pm',
-    VERSION_FROM   => 'bin/oathtool',
+    VERSION_FROM   => 'lib/Pass/OTP.pm',
     LICENSE        => 'perl_5',
-    EXE_FILES      => ['bin/oathtool'],
+    EXE_FILES      => ['bin/oathtool', 'bin/otptool'],
     TEST_REQUIRES => {
         'Test::More' => '0',
     },

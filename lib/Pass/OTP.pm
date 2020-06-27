@@ -29,6 +29,8 @@ require Exporter;
 our @ISA       = qw(Exporter);
 our @EXPORT_OK = qw(otp hotp totp);
 
+our $VERSION = '1.3';
+
 =head1 DESCRIPTION
 
 The C<Pass::OTP> module provides implementation of HOTP and TOTP algorithms according to the RFC 4226 and RFC 6238.
