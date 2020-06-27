@@ -108,6 +108,12 @@ sub otp {
         @_,
     );
 
+    return totp(
+        %options,
+        digits => 5,
+        chars  => "23456789BCDFGHJKMNPQRTVWXY",
+    ) if defined $options{issuer} and $options{issuer} =~ /^Steam/i;
+
     return hotp(%options) if $options{type} eq 'hotp';
     return totp(%options) if $options{type} eq 'totp';
 }

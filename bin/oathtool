@@ -9,7 +9,7 @@ use Getopt::Long;
 use Pass::OTP qw(otp);
 use Pass::OTP::URI qw(parse);
 
-our $VERSION = '1.1';
+our $VERSION = '1.2';
 
 my %options;
 $options{secret} = pop if $ARGV[-1] !~ /^-/;
