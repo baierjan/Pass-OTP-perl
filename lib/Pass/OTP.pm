@@ -11,9 +11,7 @@ use Math::BigInt;
 
 require Exporter;
 our @ISA       = qw(Exporter);
-our @EXPORT_OK = qw(hotp totp);
-
-use Data::Dumper;
+our @EXPORT_OK = qw(otp hotp totp);
 
 =head2 hotp
 
@@ -40,16 +38,21 @@ use Data::Dumper;
 =cut
 
 sub hotp {
-    my ($secret, %options) = @_;
+    my %options = (
+        algorithm => 'sha1',
+        counter   => 0,
+        digits    => 6,
+        @_,
+    );
 
     my $C = Math::BigInt->new($options{counter});
 
     my ($hex) = $C->as_hex =~ /^0x(.*)/;
     $hex = "0" x (16 - length($hex)) . $hex;
 
-    my $digest = Digest::SHA->new($options{digest} =~ /sha(\d+)/);
+    my $digest = Digest::SHA->new($options{algorithm} =~ /sha(\d+)/);
     my $hmac   = Digest::HMAC->new(
-        $options{base32} ? decode_base32($secret =~ s/ //gr) : pack('H*', $secret),
+        $options{base32} ? decode_base32($options{secret} =~ s/ //gr) : pack('H*', $options{secret}),
         $digest,
     );
     $hmac->add(pack 'H*', $hex);
@@ -72,10 +75,31 @@ sub hotp {
 =cut
 
 sub totp {
-    my ($secret, %options) = @_;
+    my %options = (
+        'start-time' => 0,
+        now          => time,
+        period       => 30,
+        @_,
+    );
 
-    $options{counter} = Math::BigInt->new(int(($options{now} - $options{'start-time'}) / $options{'time-step-size'}));
-    return hotp($secret, %options);
+    $options{counter} = Math::BigInt->new(int(($options{now} - $options{'start-time'}) / $options{period}));
+    return hotp(%options);
+}
+
+=head2 otp
+
+    Convenience wrapper which calls totp/hotp according to options
+
+=cut
+
+sub otp {
+    my %options = (
+        type => 'hotp',
+        @_,
+    );
+
+    return hotp(%options) if $options{type} eq 'hotp';
+    return totp(%options) if $options{type} eq 'totp';
 }
 
 1;

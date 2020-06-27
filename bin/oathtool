@@ -6,33 +6,28 @@ use warnings;
 use open qw(:std :utf8);
 
 use Getopt::Long;
-use Pass::OTP qw(hotp totp);
+use Pass::OTP qw(otp);
 
-our $VERSION = '1.0';
+our $VERSION = '1.1';
 
-my %options = (
-    'time-step-size' => '30',
-    'start-time'     => 0,
-    digest           => 'sha1',
-    digits           => 6,
-    now              => time,
-);
+my %options;
+$options{secret} = pop if $ARGV[-1] !~ /^-/;
 
 Getopt::Long::Configure(qw(auto_version auto_help));
 GetOptions(\%options,
+    'algorithm=s',
     'hotp',
     'totp:s',
     'base32|b',
     'counter|c=i',
-    'time-step-size|s=s',
+    'period|time-step-size|s=s',
     'start-time|S=s',
     'now|N=s',
     'digits|d=i',
 ) or die("Error in command line arguments\n");
 
-$options{digest} = $options{totp} if defined $options{totp} and $options{totp} ne '';
+$options{type} = 'totp' if defined $options{totp};
+$options{algorithm} = $options{totp} if defined $options{totp} and $options{totp} ne '';
 
-my $code;
-$code = hotp($ARGV[0], %options) unless defined $options{totp};
-$code = totp($ARGV[0], %options) if defined $options{totp};
+my $code = otp(%options);
 print "$code\n";
