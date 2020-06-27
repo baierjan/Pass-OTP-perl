@@ -17,6 +17,7 @@ sub VersionMessage {
 my %options = (
     'time-step-size' => '30',
     'start-time'     => 0,
+    digest           => 'sha1',
     digits           => 6,
     now              => time,
 );
@@ -33,6 +34,8 @@ GetOptions(\%options,
     'now|N=s',
     'digits|d=i',
 ) or die("Error in command line arguments\n");
+
+$options{digest} = $options{totp} if defined $options{totp} and $options{totp} ne '';
 
 my $code;
 $code = totp($ARGV[0], %options) unless $options{hotp};

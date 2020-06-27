@@ -57,9 +57,10 @@ sub totp {
     my ($hex) = $T->as_hex =~ /^0x(.*)/;
     $hex = "0" x (16 - length($hex)) . $hex;
 
-    my $hmac = Digest::HMAC->new(
+    my $digest = Digest::SHA->new($options{digest} =~ /sha(\d+)/);
+    my $hmac   = Digest::HMAC->new(
         $options{base32} ? decode_base32($secret =~ s/ //gr) : pack('H*', $secret),
-        'Digest::SHA'
+        $digest,
     );
     $hmac->add(pack 'H*', $hex);
     my $hash = $hmac->digest;
