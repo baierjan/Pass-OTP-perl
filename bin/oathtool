@@ -6,7 +6,7 @@ use warnings;
 use open qw(:std :utf8);
 
 use Getopt::Long;
-use Pass::OTP qw(totp);
+use Pass::OTP qw(hotp totp);
 
 sub HelpMessage {
 }
@@ -38,6 +38,6 @@ GetOptions(\%options,
 $options{digest} = $options{totp} if defined $options{totp} and $options{totp} ne '';
 
 my $code;
-$code = totp($ARGV[0], %options) unless $options{hotp};
-die "Not yet implemented" if $options{hotp};
+$code = hotp($ARGV[0], %options) unless defined $options{totp};
+$code = totp($ARGV[0], %options) if defined $options{totp};
 print "$code\n";

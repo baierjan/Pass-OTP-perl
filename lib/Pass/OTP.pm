@@ -11,7 +11,7 @@ use Math::BigInt;
 
 require Exporter;
 our @ISA       = qw(Exporter);
-our @EXPORT_OK = qw(totp);
+our @EXPORT_OK = qw(hotp totp);
 
 use Data::Dumper;
 
@@ -40,6 +40,28 @@ use Data::Dumper;
 =cut
 
 sub hotp {
+    my ($secret, %options) = @_;
+
+    my $C = Math::BigInt->new($options{counter});
+
+    my ($hex) = $C->as_hex =~ /^0x(.*)/;
+    $hex = "0" x (16 - length($hex)) . $hex;
+
+    my $digest = Digest::SHA->new($options{digest} =~ /sha(\d+)/);
+    my $hmac   = Digest::HMAC->new(
+        $options{base32} ? decode_base32($secret =~ s/ //gr) : pack('H*', $secret),
+        $digest,
+    );
+    $hmac->add(pack 'H*', $hex);
+    my $hash = $hmac->digest;
+
+    my $offset = hex(substr(unpack('H*', $hash), -1));
+    my $bin_code = unpack('N', substr($hash, $offset, 4));
+    $bin_code &= 0x7fffffff;
+    $bin_code = Math::BigInt->new($bin_code);
+
+    my $otp = $bin_code->bmod(10**$options{digits});
+    return "0" x ($options{digits} - length($otp)) . $otp;
 }
 
 =head2 totp
