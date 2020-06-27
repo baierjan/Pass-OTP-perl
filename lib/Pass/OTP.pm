@@ -1,8 +1,18 @@
 package Pass::OTP;
 
+=encoding utf8
+
 =head1 NAME
 
-    Perl implementation of HOTP / TOTP algorithms according to RFC 4226 / RFC 6238
+Pass::OTP - Perl implementation of HOTP / TOTP algorithms
+
+=head1 SYNOPSIS
+
+    use Pass::OTP qw(otp);
+    use Pass::OTP::URI qw(parse);
+
+    my $uri = "otpauth://totp/ACME:john.doe@email.com?secret=HXDMVJECJJWSRB3HWIZR4IFUGFTMXBOZ&issuer=ACME&digits=6";
+    my $otp_code = otp(parse($uri));
 
 =cut
 
@@ -19,27 +29,32 @@ require Exporter;
 our @ISA       = qw(Exporter);
 our @EXPORT_OK = qw(otp hotp totp);
 
-=head2 hotp
+=head1 DESCRIPTION
+
+The C<Pass::OTP> module provides implementation of HOTP and TOTP algorithms according to the RFC 4226 and RFC 6238.
+
+=head1 FUNCTIONS
+
+=over 4
+
+=item hotp(%options)
+
+Computes HMAC-based One-time Password (RFC 4226).
 
     HOTP(K,C) = Truncate(HMAC-SHA-1(K,C))
 
-    Step 1: Generate an HMAC-SHA-1 value
-        Let HS = HMAC-SHA-1(K,C)
+Step 1: Generate an HMAC-SHA-1 value
 
-    Step 2: Generate a 4-byte string (Dynamic Truncation)
-        Let Sbits = DT(HS)
+    Let HS = HMAC-SHA-1(K,C)
 
-    Step 3: Compute an HOTP value
-        Let Snum = StToNum(Sbits)       # Convert S to a number in 0..2^{31}-1
-        Return D = Snum mod 10^Digit    # D us a number in the range 0..10^{Digit}-1
+Step 2: Generate a 4-byte string (Dynamic Truncation)
 
-    sub hotp {
-        my $offset = hmac_result[19] & 0xf;
-        my $bin_code = (hmac_result[offset] & 0x7f) << 24
-            | (hmac_result[offset+1] & 0xff) << 16
-            | (hmac_result[offset+2] & 0xff) <<  8
-            | (hmac_result[offset+3] & 0xff);
-    }
+    Let Sbits = DT(HS)
+
+Step 3: Compute an HOTP value
+
+    Let Snum = StToNum(Sbits)       # Convert S to a number in 0..2^{31}-1
+    Return D = Snum mod 10^Digit    # D us a number in the range 0..10^{Digit}-1
 
 =cut
 
@@ -83,7 +98,9 @@ sub hotp {
     }
 }
 
-=head2 totp
+=item totp(%options)
+
+Computes Time-based One-time Password (RFC 6238).
 
     TOTP = HOTP(K,T)
     T = (Current Unix time - T0) / X
@@ -102,9 +119,9 @@ sub totp {
     return hotp(%options);
 }
 
-=head2 otp
+=item otp(%options)
 
-    Convenience wrapper which calls totp/hotp according to options
+Convenience wrapper which calls totp/hotp according to options.
 
 =cut
 
@@ -123,5 +140,30 @@ sub otp {
     return hotp(%options) if $options{type} eq 'hotp';
     return totp(%options) if $options{type} eq 'totp';
 }
+
+=back
+
+=head1 SEE ALSO
+
+L<Digest::HMAC>
+
+L<oathtool(1)>
+
+RFC 4226
+RFC 6238
+
+L<https://github.com/google/google-authenticator/wiki/Key-Uri-Format>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2020 Jan Baier
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See L<http://dev.perl.org/licenses/> for more information.
+
+=cut
 
 1;

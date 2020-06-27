@@ -1,0 +1,11 @@
+1.2     2020/06/27
+- added support for custom character classes
+- added compatibility with Steam Guard
+
+1.1     2020/06/27
+- added support for parsing otpauth://... links
+- added compatibility with Google Authenticator
+
+1.0     2020/06/27
+- added support for HOTP
+- added support for TOTP

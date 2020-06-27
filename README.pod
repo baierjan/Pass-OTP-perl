@@ -1,0 +1,33 @@
+=head1 NAME
+
+oathtool - alternative Perl implementation of oathtool(1), one-time password tool
+
+=head1 SYNOPSIS
+
+oathtool [options] KEY | URI
+
+    Options:
+        -h, --help
+        -v, --version
+        -a, --algorithm
+        --hotp
+        --totp[=STRING]
+        -b, --base32
+        -c, --counter=INT
+        -s, --time-step-size, --period=SECONDS
+        -S, --start-time=UNIX_TIME
+        -N, --now=UNIX_TIME
+        -d, --digits=INT
+
+    URI: otpauth://....
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (C) 2020 Jan Baier
+
+This program is free software; you can redistribute it and/or modify it
+under the terms of either: the GNU General Public License as published
+by the Free Software Foundation; or the Artistic License.
+
+See L<http://dev.perl.org/licenses/> for more information.
+
