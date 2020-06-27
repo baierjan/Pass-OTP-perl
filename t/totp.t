@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use open qw(:std :utf8);
-require_ok 'OTP';
+require_ok 'Pass::OTP';
 
 sub t {
     my $cmd    = shift;
@@ -21,7 +21,7 @@ sub t {
 
     my $ret = qx($cmd);
     chomp($ret);
-    my $code = ($cmd =~ /--totp/) ? OTP::totp($secret, %args) : OTP::hotp($secret, %args);
+    my $code = ($cmd =~ /--totp/) ? Pass::OTP::totp($secret, %args) : Pass::OTP::hotp($secret, %args);
     return is($code, $ret, $cmd);
 }
 

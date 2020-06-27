@@ -1,0 +1,40 @@
+#!/usr/bin/perl
+
+use utf8;
+use strict;
+use warnings;
+use open qw(:std :utf8);
+
+use Getopt::Long;
+use Pass::OTP qw(totp);
+
+sub HelpMessage {
+}
+
+sub VersionMessage {
+}
+
+my %options = (
+    'time-step-size' => '30',
+    'start-time'     => 0,
+    digits           => 6,
+    now              => time,
+);
+
+GetOptions(\%options,
+    'help|h'    => sub { HelpMessage() },,
+    'version|V' => sub { VersionMessage() },
+    'hotp',
+    'totp:s',
+    'base32|b',
+    'counter|c=i',
+    'time-step-size|s=s',
+    'start-time|S=s',
+    'now|N=s',
+    'digits|d=i',
+) or die("Error in command line arguments\n");
+
+my $code;
+$code = totp($ARGV[0], %options) unless $options{hotp};
+die "Not yet implemented" if $options{hotp};
+print "$code\n";
