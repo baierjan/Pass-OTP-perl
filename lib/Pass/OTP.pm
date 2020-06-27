@@ -63,8 +63,18 @@ sub hotp {
     $bin_code &= 0x7fffffff;
     $bin_code = Math::BigInt->new($bin_code);
 
-    my $otp = $bin_code->bmod(10**$options{digits});
-    return "0" x ($options{digits} - length($otp)) . $otp;
+    if (defined $options{chars}) {
+        my $otp = "";
+        foreach (1 .. $options{digits}) {
+            $otp .= substr($options{chars}, $bin_code->copy->bmod(length($options{chars})), 1);
+            $bin_code = $bin_code->btdiv(length($options{chars}));
+        }
+        return $otp;
+    }
+    else {
+        my $otp = $bin_code->bmod(10**$options{digits});
+        return "0" x ($options{digits} - length($otp)) . $otp;
+    }
 }
 
 =head2 totp
