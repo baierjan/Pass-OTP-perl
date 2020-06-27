@@ -1,5 +1,11 @@
 package Pass::OTP;
 
+=head1 NAME
+
+    Perl implementation of HOTP / TOTP algorithms according to RFC 4226 / RFC 6238
+
+=cut
+
 use utf8;
 use strict;
 use warnings;
