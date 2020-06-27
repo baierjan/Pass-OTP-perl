@@ -8,11 +8,7 @@ use open qw(:std :utf8);
 use Getopt::Long;
 use Pass::OTP qw(hotp totp);
 
-sub HelpMessage {
-}
-
-sub VersionMessage {
-}
+our $VERSION = '1.0';
 
 my %options = (
     'time-step-size' => '30',
@@ -22,9 +18,8 @@ my %options = (
     now              => time,
 );
 
+Getopt::Long::Configure(qw(auto_version auto_help));
 GetOptions(\%options,
-    'help|h'    => sub { HelpMessage() },,
-    'version|V' => sub { VersionMessage() },
     'hotp',
     'totp:s',
     'base32|b',
