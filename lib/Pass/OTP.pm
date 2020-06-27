@@ -74,26 +74,8 @@ sub hotp {
 sub totp {
     my ($secret, %options) = @_;
 
-    my $T = Math::BigInt->new(int(($options{now} - $options{'start-time'}) / $options{'time-step-size'}));
-
-    my ($hex) = $T->as_hex =~ /^0x(.*)/;
-    $hex = "0" x (16 - length($hex)) . $hex;
-
-    my $digest = Digest::SHA->new($options{digest} =~ /sha(\d+)/);
-    my $hmac   = Digest::HMAC->new(
-        $options{base32} ? decode_base32($secret =~ s/ //gr) : pack('H*', $secret),
-        $digest,
-    );
-    $hmac->add(pack 'H*', $hex);
-    my $hash = $hmac->digest;
-
-    my $offset = hex(substr(unpack('H*', $hash), -1));
-    my $bin_code = unpack('N', substr($hash, $offset, 4));
-    $bin_code &= 0x7fffffff;
-    $bin_code = Math::BigInt->new($bin_code);
-
-    my $otp = $bin_code->bmod(10**$options{digits});
-    return "0" x ($options{digits} - length($otp)) . $otp;
+    $options{counter} = Math::BigInt->new(int(($options{now} - $options{'start-time'}) / $options{'time-step-size'}));
+    return hotp($secret, %options);
 }
 
 1;
