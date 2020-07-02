@@ -10,6 +10,7 @@ WriteMakefile(
     VERSION_FROM   => 'lib/Pass/OTP.pm',
     LICENSE        => 'perl_5',
     EXE_FILES      => ['bin/oathtool', 'bin/otptool'],
+    MIN_PERL_VERSION => '5.014',
     TEST_REQUIRES => {
         'Test::More' => '0',
     },
@@ -17,7 +18,7 @@ WriteMakefile(
         'Convert::Base32' => '0',
         'Digest::HMAC' => '0',
         'Digest::SHA' => '0',
-        'Math::BigInt' => '0',
+        'Math::BigInt' => '1.999806',
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Pass-OTP-*' },

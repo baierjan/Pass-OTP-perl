@@ -29,7 +29,7 @@ require Exporter;
 our @ISA       = qw(Exporter);
 our @EXPORT_OK = qw(otp hotp totp);
 
-our $VERSION = '1.4';
+our $VERSION = '1.5';
 
 =head1 DESCRIPTION
 
