@@ -1,3 +1,6 @@
+1.702   2024/03/11
+- fix type in Makefile.PL
+
 1.701   2024/03/11
 - fix kwalitee issues
 - improve versioning
