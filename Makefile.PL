@@ -15,7 +15,7 @@ WriteMakefile(
         'Test::More' => '0',
     },
     PREREQ_PM => {
-        'Convert::Base32' => '0',
+        'MIME::Base32' => '0',
         'Digest::HMAC' => '0',
         'Digest::SHA' => '0',
         'Math::BigInt' => '1.999806',

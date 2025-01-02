@@ -20,7 +20,7 @@ use utf8;
 use strict;
 use warnings;
 
-use Convert::Base32 qw(decode_base32);
+use MIME::Base32 qw(decode_base32);
 use Digest::HMAC;
 use Digest::SHA;
 use Math::BigInt;
