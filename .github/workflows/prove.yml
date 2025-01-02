@@ -11,7 +11,7 @@ jobs:
       - name: Install dependencies
         run: >-
           sudo apt-get install
-          libconvert-base32-perl
+          libmime-base32-perl
           libdigest-hmac-perl
           libdigest-sha-perl
           libmath-bigint-perl
