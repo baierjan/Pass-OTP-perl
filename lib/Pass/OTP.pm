@@ -71,7 +71,7 @@ sub hotp {
     my $C = Math::BigInt->new($options{counter});
 
     my ($hex) = $C->as_hex =~ /^0x(.*)/;
-    $hex = "0" x (16 - length($hex)) . $hex;
+    $hex = '0' x (16 - length($hex)) . $hex;
 
     my ($algorithm) = $options{algorithm} =~ /sha(\d+)/i;
     my $digest = Digest::SHA->new($algorithm);
@@ -89,7 +89,7 @@ sub hotp {
     $bin_code = Math::BigInt->new($bin_code);
 
     if (defined $options{chars}) {
-        my $otp = "";
+        my $otp = '';
         foreach (1 .. $options{digits}) {
             $otp .= substr($options{chars}, $bin_code->copy->bmod(length($options{chars})), 1);
             $bin_code = $bin_code->btdiv(length($options{chars}));
@@ -98,7 +98,7 @@ sub hotp {
     }
     else {
         my $otp = $bin_code->bmod(10**$options{digits});
-        return "0" x ($options{digits} - length($otp)) . $otp;
+        return '0' x ($options{digits} - length($otp)) . $otp;
     }
 }
 
@@ -138,7 +138,7 @@ sub otp {
     return totp(
         %options,
         digits => 5,
-        chars  => "23456789BCDFGHJKMNPQRTVWXY",
+        chars  => '23456789BCDFGHJKMNPQRTVWXY',
     ) if defined $options{issuer} and $options{issuer} =~ /^Steam/i;
 
     return hotp(%options) if $options{type} eq 'hotp';
