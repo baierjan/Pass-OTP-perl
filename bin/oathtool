@@ -56,7 +56,7 @@ GetOptions(\%options,
     'digits|d=i',
 ) || pod2usage(2);
 
-if ($ARGV[0] eq "-") {
+if ($ARGV[0] eq '-') {
     $options{secret} = <>;
     chomp($options{secret});
 } elsif (@ARGV == 0) {

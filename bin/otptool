@@ -25,7 +25,7 @@ use Pass::OTP qw(otp);
 use Pass::OTP::URI qw(parse);
 
 our $VERSION = $Pass::OTP::VERSION;
-my $uri = "";
+my $uri = '';
 
 Getopt::Long::Configure(qw(auto_version));
 GetOptions(
@@ -34,7 +34,7 @@ GetOptions(
 
 pod2usage(2) if @ARGV == 0;
 
-if ($ARGV[0] eq "-") {
+if ($ARGV[0] eq '-') {
     $uri = <>;
 } elsif ($ARGV[0] =~ m#^otpauth://#) {
     $uri = $ARGV[0];

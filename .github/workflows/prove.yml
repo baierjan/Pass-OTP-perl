@@ -3,11 +3,31 @@ name: Perl tests
 # yamllint disable-line rule:truthy
 on: [push, pull_request]
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project code
+        uses: actions/checkout@v6
+
+      - name: Install dependencies
+        run: >-
+          sudo apt-get install
+          libmime-base32-perl
+          libdigest-hmac-perl
+          libdigest-sha-perl
+          libmath-bigint-perl
+          libperl-critic-perl
+          libperl-critic-community-perl
+
+      - name: Run perlcritic
+        run: perlcritic .
+
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
+
       - name: Install dependencies
         run: >-
           sudo apt-get install
@@ -16,5 +36,6 @@ jobs:
           libdigest-sha-perl
           libmath-bigint-perl
           oathtool
+
       - name: Run tests
         run: prove -vlw
