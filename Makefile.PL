@@ -31,10 +31,10 @@ WriteMakefile(
         },
         provides => {
             'Pass::OTP' => {
-                file => 'lib/Pass/OTP.pm', version => '1.801',
+                file => 'lib/Pass/OTP.pm', version => '1.900',
             },
             'Pass::OTP::URI' => {
-                file => 'lib/Pass/OTP/URI.pm', version => '1.801',
+                file => 'lib/Pass/OTP/URI.pm', version => '1.900',
             },
         }
     },
