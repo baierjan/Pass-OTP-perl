@@ -17,7 +17,7 @@ is(
 
 is(
     Pass::OTP::otp(
-        secret => '00',
+        secret  => '00',
         counter => 100,
     ),
     '032003',

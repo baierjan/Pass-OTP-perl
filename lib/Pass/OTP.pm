@@ -74,16 +74,16 @@ sub hotp {
     $hex = '0' x (16 - length($hex)) . $hex;
 
     my ($algorithm) = $options{algorithm} =~ /sha(\d+)/i;
-    my $digest = Digest::SHA->new($algorithm);
-    my $hmac   = Digest::HMAC->new(
+    my $digest      = Digest::SHA->new($algorithm);
+    my $hmac        = Digest::HMAC->new(
         $options{base32} ? decode_base32($options{secret} =~ s/ //gr) : pack('H*', $options{secret}),
         $digest,
-        $algorithm < 384? 64 : 128,
+        $algorithm < 384 ? 64 : 128,
     );
     $hmac->add(pack 'H*', $hex);
     my $hash = $hmac->digest;
 
-    my $offset = hex(substr(unpack('H*', $hash), -1));
+    my $offset   = hex(substr(unpack('H*', $hash), -1));
     my $bin_code = unpack('N', substr($hash, $offset, 4));
     $bin_code &= 0x7fffffff;
     $bin_code = Math::BigInt->new($bin_code);
