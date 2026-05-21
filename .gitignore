@@ -2,3 +2,8 @@
 *.tdy
 *.bak
 .tidyall.d/
+MANIFEST
+MYMETA.json
+MYMETA.yml
+Makefile
+*.tar.gz
